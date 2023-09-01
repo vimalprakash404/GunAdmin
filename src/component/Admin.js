@@ -148,7 +148,7 @@ function Admin()
   const [verified_count,updatecount] = useState(0)
     const index="init123"
     const gun = Gun({
-        peers: ['http:192.168.1.126:5000/gun']
+        peers: ['http:192.168.102.163:5000/gun']
       })
   
   function putdata()
