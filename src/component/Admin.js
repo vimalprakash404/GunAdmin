@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Gun from "gun";
 import jsonData from './../datagh.json';
+import axios from 'axios'; 
 
 function Admin()
 {
@@ -14,7 +15,6 @@ function Admin()
   {
     gun.get(index).put(jsonData)
     console.log("uploaded")
-    //getkey()
     getdata()
   }
   function getcount()
@@ -106,10 +106,32 @@ function Admin()
       if (lastCell) {
         
         lastCell.innerHTML = '<span class="badge bg-success">verifed</span>';
-        getcount();
+        get_count_from_server();
       }
   }
  
+  function get_count_from_server()
+  {
+    axios.get('http://localhost:5000/verifiedcount') // Replace with your server's URL
+      .then((response) =>{ 
+        updatecount(response.data.data)
+      } )
+      .catch((error) => console.error('Error:', error));
+  }
+  function load_data_from_server()
+  {
+    axios.get('http://localhost:5000/getdata') // Replace with your server's URL
+      .then((response) =>{ 
+        response.data.sort((a, b) => a._id - b._id);
+        //console.log(response.data)
+        setUser([])
+        response.data.forEach((element) => {
+          setUser(data => data.concat({"Name":element.Name,"ID":element._id,"Institution":element.Institution,"Email":element.Email,"Phone":element.Phone,"Verified":element.Verified}));
+        });
+        get_count_from_server()
+      } )
+      .catch((error) => console.error('Error:', error));
+  }
     return(
         <div className="container" onLoad={getdata}>
             <div className="row">
@@ -139,7 +161,7 @@ function Admin()
             <button className="btn btn-primary" onClick={putdata}>Upload</button>
              <button className="btn btn-primary" onClick={getdata}>Get</button>
              <button className="btn btn-primary" onClick={getjson}>get json</button>
-            
+             <button className="btn btn-primary" onClick={load_data_from_server}>get from server</button>
             <div className="container">
                 <div className="row">
                     <div className="col">
