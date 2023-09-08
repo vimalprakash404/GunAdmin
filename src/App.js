@@ -1,22 +1,32 @@
 import { useState } from "react";
 import Admin from "./component/Admin";
 import Verify from "./component/Verify";
+import ServerList  from "./component/ServerList";
 function App() {
   const [dashboard,setdashboard] = useState(true)
   const [verification_tab,set_verification_tab]=useState(false)
+  const [server_tab,set_server_tab]=useState(false)
 
   function opendashboard()
   {
     setdashboard(true);
     set_verification_tab(false);
+    set_server_tab(false);
   }
 
   function open_verification_tab()
   {
       setdashboard(false);
       set_verification_tab(true);
+      set_server_tab(false);
   }
   
+  function open_server_tab()
+  {
+    set_server_tab(true);
+    set_verification_tab(false);
+    setdashboard(false);
+  }
   return (
     <div>
       
@@ -39,13 +49,16 @@ function App() {
       
 
       <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" />
-      <label class="btn btn-outline-primary" for="btnradio3">Radio 3</label>
+      <label class="btn btn-outline-primary" for="btnradio3" onClick={open_server_tab}>server list</label>
     </div>
       {
         dashboard ? <Admin></Admin> : ""
       }
       {
         verification_tab ? <Verify></Verify> : ""
+      }
+      {
+        server_tab ? <ServerList></ServerList> : ""
       }
     </div>
   );
